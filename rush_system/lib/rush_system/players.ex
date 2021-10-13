@@ -9,13 +9,13 @@ defmodule RushSystem.Players do
   end
 
   def open_file_and_add_informations(file) do
-		with {:ok, body} <- File.read(file),
-		{:ok, items} <- Jason.decode(body) do
-			Enum.each(items, fn item ->
-				create(item)
-			end)
-		end
-	end
+    with {:ok, body} <- File.read(file),
+         {:ok, items} <- Jason.decode(body) do
+      Enum.each(items, fn item ->
+        create(item)
+      end)
+    end
+  end
 
   def fetch_all(%{"page" => page, "size" => size} = params) do
     order_by = Map.get(params, "order_by", nil)
@@ -42,6 +42,7 @@ defmodule RushSystem.Players do
     size = verify_integer(size)
 
     total = total_players_name(name)
+
     players =
       name
       |> Player.fetch_by_name(order_by, page, size)
@@ -57,24 +58,24 @@ defmodule RushSystem.Players do
   defp total_players_name(name), do: name |> Player.count_search_name() |> Repo.one()
 
   defp format_params(%{
-    "1st" => first_downs,
-    "1st%" => first_down_percent,
-    "20+" => more_20_yards,
-    "40+" => more_40_yards,
-    "Att" => attempts,
-    "Att/G" => attempts_per_game_avg,
-    "Avg" => avg_yards_per_attempt,
-    "FUM" => fumbles,
-    "Lng" => longest_rush,
-    "Player" => name,
-    "Pos" => postion,
-    "TD" => total_touchdowns,
-    "Team" => team_abv,
-    "Yds" => total_yards,
-    "Yds/G" => yards_per_game
-    }) do
-		%{
-			"name" => name,
+         "1st" => first_downs,
+         "1st%" => first_down_percent,
+         "20+" => more_20_yards,
+         "40+" => more_40_yards,
+         "Att" => attempts,
+         "Att/G" => attempts_per_game_avg,
+         "Avg" => avg_yards_per_attempt,
+         "FUM" => fumbles,
+         "Lng" => longest_rush,
+         "Player" => name,
+         "Pos" => postion,
+         "TD" => total_touchdowns,
+         "Team" => team_abv,
+         "Yds" => total_yards,
+         "Yds/G" => yards_per_game
+       }) do
+    %{
+      "name" => name,
       "team_abv" => team_abv,
       "postion" => postion,
       "attempts_per_game_avg" => verify_float(attempts_per_game_avg),
@@ -89,23 +90,25 @@ defmodule RushSystem.Players do
       "more_20_yards" => verify_integer(more_20_yards),
       "more_40_yards" => verify_integer(more_40_yards),
       "fumbles" => verify_integer(fumbles)
-		}
-	end
+    }
+  end
 
-	defp verify_integer(param) do
+  defp verify_integer(param) do
     case is_integer(param) do
       true ->
         param
+
       false ->
         {value, _} = Integer.parse(param)
         value
     end
   end
 
-	defp verify_float(param) do
+  defp verify_float(param) do
     case is_float(param) do
       true ->
         param
+
       false ->
         if is_integer(param) do
           param * 1.0

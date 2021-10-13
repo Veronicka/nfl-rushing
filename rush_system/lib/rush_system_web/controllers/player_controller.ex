@@ -30,11 +30,11 @@ defmodule RushSystemWeb.PlayerController do
       |> put_resp_header("content-disposition", ~s[attachment; filename="report.csv"])
       |> send_chunked(:ok)
 
-      CSVCreator.generate_csv fn stream ->
-        for result <- stream do
-          conn |> chunk(result)
-        end
+    CSVCreator.generate_csv(fn stream ->
+      for result <- stream do
+        conn |> chunk(result)
       end
+    end)
 
     conn
   end

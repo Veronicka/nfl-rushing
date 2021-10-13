@@ -1,5 +1,4 @@
 defmodule RushSystemWeb.PlayerControllerTest do
-
   use RushSystemWeb.ConnCase, async: false
 
   import Mock
@@ -51,7 +50,7 @@ defmodule RushSystemWeb.PlayerControllerTest do
             yards_per_game: 1.7
           }
         ],
-      total: 2
+        total: 2
       },
       order_by_total_touchdowns: %{
         players: [
@@ -129,40 +128,43 @@ defmodule RushSystemWeb.PlayerControllerTest do
   describe "Player Controller" do
     test "GET /api/players", fixture do
       with_mock Players,
-        fetch_all: fn _ -> {:ok, fixture.fetch_players} end
-      do
+        fetch_all: fn _ -> {:ok, fixture.fetch_players} end do
         conn =
           build_conn()
           |> get("/api/players?page=1&size=5")
 
         assert conn.status == 200
-        assert conn.resp_body == "{\"message\":\"Players\",\"result\":[{\"name\":\"Joe Banyard\",\"team_abv\":\"JAX\",\"postion\":\"RB\",\"attempts_per_game_avg\":2.0,\"attempts\":2.0,\"total_yards\":7,\"avg_yards_per_attempt\":3.5,\"yards_per_game\":7.0,\"total_touchdowns\":0,\"longest_rush\":\"7\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0},{\"name\":\"Shaun Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":0,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":2}"
+
+        assert conn.resp_body ==
+                 "{\"message\":\"Players\",\"result\":[{\"name\":\"Joe Banyard\",\"team_abv\":\"JAX\",\"postion\":\"RB\",\"attempts_per_game_avg\":2.0,\"attempts\":2.0,\"total_yards\":7,\"avg_yards_per_attempt\":3.5,\"yards_per_game\":7.0,\"total_touchdowns\":0,\"longest_rush\":\"7\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0},{\"name\":\"Shaun Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":0,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":2}"
       end
     end
 
     test "GET /api/players?order_by=TD", fixture do
       with_mock Players,
-        fetch_all: fn _ -> {:ok, fixture.order_by_total_touchdowns} end
-      do
+        fetch_all: fn _ -> {:ok, fixture.order_by_total_touchdowns} end do
         conn =
           build_conn()
           |> get("/api/players?order_by=TD&page=1&size=5")
 
         assert conn.status == 200
-        assert conn.resp_body == "{\"message\":\"Players\",\"result\":[{\"name\":\"Fred Jose\",\"team_abv\":\"JAX\",\"postion\":\"RB\",\"attempts_per_game_avg\":2.0,\"attempts\":2.0,\"total_yards\":7,\"avg_yards_per_attempt\":3.5,\"yards_per_game\":7.0,\"total_touchdowns\":1,\"longest_rush\":\"7\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0},{\"name\":\"Paul Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":5,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":2}"
+
+        assert conn.resp_body ==
+                 "{\"message\":\"Players\",\"result\":[{\"name\":\"Fred Jose\",\"team_abv\":\"JAX\",\"postion\":\"RB\",\"attempts_per_game_avg\":2.0,\"attempts\":2.0,\"total_yards\":7,\"avg_yards_per_attempt\":3.5,\"yards_per_game\":7.0,\"total_touchdowns\":1,\"longest_rush\":\"7\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0},{\"name\":\"Paul Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":5,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":2}"
       end
     end
 
     test "GET /api/players/:name", fixture do
       with_mock Players,
-        fetch_by_name: fn _ -> {:ok, fixture.fetch_by_name} end
-      do
+        fetch_by_name: fn _ -> {:ok, fixture.fetch_by_name} end do
         conn =
           build_conn()
           |> get("/api/players/paul?page=1&size=5")
 
         assert conn.status == 200
-        assert conn.resp_body == "{\"message\":\"Players\",\"result\":[{\"name\":\"Paul Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":5,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":1}"
+
+        assert conn.resp_body ==
+                 "{\"message\":\"Players\",\"result\":[{\"name\":\"Paul Hill\",\"team_abv\":\"MIN\",\"postion\":\"QB\",\"attempts_per_game_avg\":1.7,\"attempts\":5.0,\"total_yards\":5,\"avg_yards_per_attempt\":1.0,\"yards_per_game\":1.7,\"total_touchdowns\":5,\"longest_rush\":\"9\",\"first_downs\":0,\"first_down_percent\":0.0,\"more_20_yards\":0,\"more_40_yards\":0,\"fumbles\":0}],\"total\":1}"
       end
     end
   end

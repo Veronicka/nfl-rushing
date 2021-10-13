@@ -1,5 +1,4 @@
 defmodule RushSystem.CSVCreator do
-
   require Logger
 
   alias RushSystem.{Models.Player, Repo}

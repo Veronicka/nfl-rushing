@@ -8,22 +8,22 @@ defmodule RushSystem.Models.Player do
   import Ecto.{Changeset, Query}
 
   @fields [
-      :name,
-      :team_abv,
-      :postion,
-      :attempts_per_game_avg,
-      :attempts,
-      :total_yards,
-      :avg_yards_per_attempt,
-      :yards_per_game,
-      :total_touchdowns,
-      :longest_rush,
-      :first_downs,
-      :first_down_percent,
-      :more_20_yards,
-      :more_40_yards,
-      :fumbles
-    ]
+    :name,
+    :team_abv,
+    :postion,
+    :attempts_per_game_avg,
+    :attempts,
+    :total_yards,
+    :avg_yards_per_attempt,
+    :yards_per_game,
+    :total_touchdowns,
+    :longest_rush,
+    :first_downs,
+    :first_down_percent,
+    :more_20_yards,
+    :more_40_yards,
+    :fumbles
+  ]
 
   @derive {
     Jason.Encoder,
@@ -64,9 +64,9 @@ defmodule RushSystem.Models.Player do
   end
 
   def fetch_all(order \\ nil, page \\ 1, size \\ 10) do
-      from(p in __MODULE__)
-      |> order_by_param(order)
-      |> paginate(page, size)
+    from(p in __MODULE__)
+    |> order_by_param(order)
+    |> paginate(page, size)
   end
 
   def fetch_all_without_pagination() do
@@ -78,7 +78,8 @@ defmodule RushSystem.Models.Player do
     like_term = "%#{downcase}%"
 
     from(p in __MODULE__,
-      where: like(fragment("lower(?)", p.name), ^like_term))
+      where: like(fragment("lower(?)", p.name), ^like_term)
+    )
     |> order_by_param(order)
     |> paginate(page, size)
   end
@@ -91,7 +92,10 @@ defmodule RushSystem.Models.Player do
     downcase = String.downcase(name)
     like_term = "%#{downcase}%"
 
-    from(p in __MODULE__, select: count(p.id), where: like(fragment("lower(?)", p.name), ^like_term))
+    from(p in __MODULE__,
+      select: count(p.id),
+      where: like(fragment("lower(?)", p.name), ^like_term)
+    )
   end
 
   defp order_by_param(query, param) do
@@ -113,7 +117,7 @@ defmodule RushSystem.Models.Player do
   defp paginate(query, page, size) do
     from(query,
       limit: ^size,
-      offset: ^((page-1) * size)
+      offset: ^((page - 1) * size)
     )
   end
 end
