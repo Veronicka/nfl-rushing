@@ -3,11 +3,14 @@ defmodule RushSystem.CSVCreator do
 
   alias RushSystem.{Models.Player, Repo}
 
-  def generate_csv(callback) do
+  def generate_csv(params, callback) do
     Logger.info("Generating CSV ...")
 
+    order_by = Map.get(params, "order_by", nil)
+    name = Map.get(params, "name", nil)
+
     Repo.transaction(fn ->
-      Player.fetch_all_without_pagination()
+      Player.fetch_all_csv(name, order_by)
       |> Repo.stream()
       |> Stream.map(&build_csv_row/1)
       |> CSV.Encoding.Encoder.encode(headers: true)

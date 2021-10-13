@@ -63,6 +63,21 @@ defmodule RushSystem.Models.Player do
     |> validate_required(@required)
   end
 
+  def fetch_all_csv(name \\ nil, order \\ nil) do
+    query = from(p in __MODULE__) |> order_by_param(order)
+
+    if is_nil(name) or name == "null" do
+      query
+    else
+      downcase = String.downcase(name)
+      like_term = "%#{downcase}%"
+
+      from(p in query,
+        where: like(fragment("lower(?)", p.name), ^like_term)
+      )
+    end
+  end
+
   def fetch_all(order \\ nil, page \\ 1, size \\ 10) do
     from(p in __MODULE__)
     |> order_by_param(order)

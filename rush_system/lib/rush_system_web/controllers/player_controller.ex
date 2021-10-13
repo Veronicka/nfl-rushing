@@ -23,14 +23,14 @@ defmodule RushSystemWeb.PlayerController do
     end
   end
 
-  def generate_csv(conn, _params) do
+  def generate_csv(conn, params) do
     conn =
       conn
       |> put_resp_content_type("text/csv")
       |> put_resp_header("content-disposition", ~s[attachment; filename="report.csv"])
       |> send_chunked(:ok)
 
-    CSVCreator.generate_csv(fn stream ->
+    CSVCreator.generate_csv(params, fn stream ->
       for result <- stream do
         conn |> chunk(result)
       end
