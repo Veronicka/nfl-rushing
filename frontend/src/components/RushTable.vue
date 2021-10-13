@@ -130,17 +130,17 @@
     methods: {
       on_clear_search() {
         this.search = null
-        this.sort_by_selected = null
+        // this.sort_by_selected = null
         this.page = 1
         this.fetch_players()
       },
       on_search(){
-        this.sort_by_selected = null
+        // this.sort_by_selected = null
         this.page = 1
         this.fetch_players()
       },
       sort_by(key) {
-        this.search = null
+        // this.search = null
         this.sort_by_selected = this.sort_by_selected === key ? null : key
         this.page = 1
         this.fetch_players()
@@ -179,19 +179,22 @@
         })
       },
       on_export() {
-        axios.post(`http://localhost:4000/api/players/generate_csv`, {})
+        axios.get('http://localhost:4000/api/players/generate_csv', {
+          params: {
+            name: this.search,
+            order_by: this.sort_by_selected
+          },
+          responseType: 'blob' })
           .then((response) => {
-            console.log(response.data)
-            window.open(`file://${response.data.filepath}`)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
-      on_export_blob() {
-        axios.get(`http://localhost:4000/api/players/generate_csv`, { responseType: 'blob' })
-          .then((response) => {
-            new File([response.data], 'data.csv');
+            var blob = new Blob([response.data], { type: 'text/csv;charset=utf-8;' });
+            var a = document.createElement("a");
+            var url = URL.createObjectURL(blob);
+            a.setAttribute("href", url);
+            a.setAttribute("download", 'data.csv');
+            a.style.visibility = 'hidden';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
           })
           .catch((error) => {
             console.log(error);
