@@ -64,6 +64,7 @@ If you have any questions regarding requirements, do not hesitate to email your 
 
 Install elixir deps:
 ```shell
+$ cd rush_system
 $ mix deps.get
 ```
 
